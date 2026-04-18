@@ -1,5 +1,8 @@
 # scouting-america-mcp
 
+[![Run Tests](https://github.com/awfrazer/scouting-api-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/awfrazer/scouting-api-mcp/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A [Model Context Protocol](https://modelcontextprotocol.io) server that exposes the unofficial Scouting America API (`api.scouting.org`) as a set of read-only tools usable from Claude Desktop, Cursor, the MCP Inspector, or any other MCP-compatible client.
 
 This is a **third-party, unofficial integration**. Scouting America does not publish or support a public API. Use at your own risk; you must agree to Scouting America's terms of service when using your own credentials.
