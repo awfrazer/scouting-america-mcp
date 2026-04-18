@@ -1,0 +1,44 @@
+{
+  "name": "scouting-america-mcp",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server exposing the Scouting America API (api.scouting.org).",
+  "license": "MIT",
+  "author": "Alex Frazer",
+  "type": "module",
+  "bin": {
+    "mcp-server-scouting-america": "dist/index.js",
+    "mcp-server-scouting-america-stdio": "dist/stdio.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -fr ./dist",
+    "start": "node dist/index.js",
+    "start:stdio": "node dist/stdio.js",
+    "dev": "node --watch --import tsx src/index.ts",
+    "test": "node --import tsx --test 'test/**/*.test.ts'",
+    "test:watch": "node --import tsx --test --watch 'test/**/*.test.ts'"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
