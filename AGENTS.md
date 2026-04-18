@@ -18,7 +18,7 @@ npm test
 npm run build
 ```
 
-CI is not configured, so these are the only safety net.
+CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)) runs the same three commands on every push and pull request, but running them locally first is faster than waiting on Actions.
 
 ## Layout
 
