@@ -9,9 +9,23 @@ import { listRegisteredTools } from "../src/tools/index.js";
 // `serverName.toolName` budget that some clients enforce.
 const EXPECTED_TOOLS = [
   "api_request",
+  "get_advancement_dashboard",
+  "get_advancement_history",
+  "get_advancements_ready_to_award",
   "get_adventure",
   "get_adventure_requirements",
+  "get_award_requirements",
+  "get_mbc_assigned_youths",
+  "get_mbc_dashboard",
+  "get_mbc_profile",
+  "get_merit_badge",
+  "get_merit_badge_requirements",
   "get_my_scout",
+  "get_org_adventure_progress",
+  "get_org_award_progress",
+  "get_org_merit_badge_progress",
+  "get_org_payment_logs",
+  "get_org_rank_progress",
   "get_organization_profile",
   "get_parent_guardian_invitation",
   "get_payment_logs",
@@ -23,22 +37,36 @@ const EXPECTED_TOOLS = [
   "get_person_ypt_training",
   "get_rank",
   "get_rank_requirements",
+  "get_unit_activities_dashboard",
   "get_user_activity_summary",
   "get_youth_advancement_requirements",
   "get_youth_adventures",
   "get_youth_awards",
   "get_youth_leadership_history",
+  "get_youth_merit_badges",
   "get_youth_ranks",
+  "get_youth_ss_electives",
   "list_activities",
   "list_advancement_comments",
   "list_adventures",
   "list_awards",
   "list_membership_registrations",
   "list_merit_badges",
+  "list_organization_adults",
+  "list_organization_youths",
+  "list_pending_leadership",
   "list_ranks",
   "list_ss_electives",
+  "list_sub_units",
   "list_unit_events",
+  "list_unit_leadership_positions",
+  "list_unit_parents",
   "lookup",
+  "search_camps",
+  "search_merit_badge_counselors",
+  "search_orgs_nearby",
+  "search_relationships",
+  "search_units",
   "whoami",
 ];
 
@@ -56,10 +84,10 @@ const TOOLS_WITH_OUTPUT_SCHEMA = new Set(["whoami", "api_request"]);
 describe("tool registry", () => {
   const tools = listRegisteredTools();
 
-  it("registers all 32 expected tools", () => {
+  it("registers all 60 expected tools", () => {
     const names = tools.map((t) => t.name).sort();
     assert.deepEqual(names, [...EXPECTED_TOOLS].sort());
-    assert.equal(names.length, 32);
+    assert.equal(names.length, 60);
   });
 
   it("every tool has no redundant `scouting_` prefix and has a description + inputSchema", () => {

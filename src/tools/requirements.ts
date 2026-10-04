@@ -2,6 +2,82 @@ import { createToolResponse } from "./responses.js";
 import { registerTool } from "./toolRegistry.js";
 
 registerTool(
+  "get_merit_badge",
+  {
+    description:
+      "Gets the full definition of a single merit badge by numeric id. The response includes a `versions[]` array \u2014 pick the appropriate `versionId` for `get_merit_badge_requirements`.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        meritBadgeId: {
+          type: ["string", "number"],
+          description: "Numeric merit badge id (e.g. 20 for Camping).",
+        },
+      },
+      required: ["meritBadgeId"],
+      additionalProperties: false,
+    },
+    annotations: { readOnlyHint: true },
+  },
+  async (args, client) => {
+    const data = await client.get(
+      `/advancements/v2/meritBadges/${args.meritBadgeId}`,
+    );
+    return createToolResponse(data);
+  },
+);
+
+registerTool(
+  "get_merit_badge_requirements",
+  {
+    description:
+      "Gets the full requirement text for a specific merit badge version. Both `meritBadgeId` and `versionId` are required; `versionId` comes from `get_merit_badge`'s `versions[]` array.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        meritBadgeId: { type: ["string", "number"] },
+        versionId: { type: ["string", "number"] },
+      },
+      required: ["meritBadgeId", "versionId"],
+      additionalProperties: false,
+    },
+    annotations: { readOnlyHint: true },
+  },
+  async (args, client) => {
+    const data = await client.get(
+      `/advancements/meritBadges/${args.meritBadgeId}/requirements`,
+      { versionId: args.versionId as string | number },
+    );
+    return createToolResponse(data);
+  },
+);
+
+registerTool(
+  "get_award_requirements",
+  {
+    description:
+      "Gets the full requirement text for a specific award version. Both `awardId` and `versionId` are required; `versionId` comes from the award's `versions[]` array in `list_awards`.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        awardId: { type: ["string", "number"] },
+        versionId: { type: ["string", "number"] },
+      },
+      required: ["awardId", "versionId"],
+      additionalProperties: false,
+    },
+    annotations: { readOnlyHint: true },
+  },
+  async (args, client) => {
+    const data = await client.get(
+      `/advancements/awards/${args.awardId}/requirements`,
+      { versionId: args.versionId as string | number },
+    );
+    return createToolResponse(data);
+  },
+);
+
+registerTool(
   "get_rank",
   {
     description:

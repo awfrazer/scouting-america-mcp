@@ -1,6 +1,6 @@
-import { getCurrentUserId } from "../session.js";
 import { createToolResponse } from "./responses.js";
 import { registerTool } from "./toolRegistry.js";
+import { resolveUserId } from "./userId.js";
 
 
 registerTool(
@@ -117,10 +117,7 @@ registerTool(
     annotations: { readOnlyHint: true },
   },
   async (args, client) => {
-    const userId =
-      args.userId !== undefined && args.userId !== null && args.userId !== ""
-        ? String(args.userId)
-        : await getCurrentUserId();
+    const userId = await resolveUserId(args);
     const data = await client.postFilter(
       `/advancements/v2/users/${userId}/comments`,
       {

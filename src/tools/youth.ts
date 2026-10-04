@@ -1,14 +1,6 @@
-import { getCurrentUserId } from "../session.js";
 import { createToolResponse } from "./responses.js";
 import { registerTool } from "./toolRegistry.js";
-
-async function resolveUserId(args: Record<string, unknown>): Promise<string> {
-  const provided = args.userId;
-  if (provided !== undefined && provided !== null && provided !== "") {
-    return String(provided);
-  }
-  return getCurrentUserId();
-}
+import { resolveUserId } from "./userId.js";
 
 registerTool(
   "get_youth_leadership_history",
@@ -99,6 +91,52 @@ registerTool(
     const userId = await resolveUserId(args);
     const data = await client.get(
       `/advancements/v2/youth/${userId}/awards`,
+    );
+    return createToolResponse(data);
+  },
+);
+
+registerTool(
+  "get_youth_merit_badges",
+  {
+    description:
+      "Returns a youth's merit badge progress (started and completed badges). `userId` defaults to the authenticated user.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        userId: { type: ["string", "number"] },
+      },
+      additionalProperties: false,
+    },
+    annotations: { readOnlyHint: true },
+  },
+  async (args, client) => {
+    const userId = await resolveUserId(args);
+    const data = await client.get(
+      `/advancements/v2/youth/${userId}/meritBadges`,
+    );
+    return createToolResponse(data);
+  },
+);
+
+registerTool(
+  "get_youth_ss_electives",
+  {
+    description:
+      "Returns a youth's Sea Scout elective progress. `userId` defaults to the authenticated user.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        userId: { type: ["string", "number"] },
+      },
+      additionalProperties: false,
+    },
+    annotations: { readOnlyHint: true },
+  },
+  async (args, client) => {
+    const userId = await resolveUserId(args);
+    const data = await client.get(
+      `/advancements/v2/youth/${userId}/ssElectives`,
     );
     return createToolResponse(data);
   },

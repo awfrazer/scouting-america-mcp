@@ -9,15 +9,18 @@ This is a **third-party, unofficial integration**. Scouting America does not pub
 
 ## What's exposed
 
-32 tools, all read-only:
+60 tools, all read-only:
 
 - **Catalog (5)** — `list_ranks`, `list_adventures`, `list_awards`, `list_merit_badges`, `list_ss_electives`.
-- **Requirements (4)** — `get_rank` / `get_rank_requirements`, `get_adventure` / `get_adventure_requirements`. Requirements are versioned; the parent record's `versions[]` array tells you which `versionId` to ask for.
+- **Requirements (7)** — `get_rank` / `get_rank_requirements`, `get_adventure` / `get_adventure_requirements`, `get_merit_badge` / `get_merit_badge_requirements`, `get_award_requirements`. Requirements are versioned; the parent record's `versions[]` array tells you which `versionId` to ask for.
 - **Lookups (1)** — `lookup`, with a `category` enum covering 18 reference lists (countries, states, positions, schools, etc.).
 - **Person (9)** — `get_person_profile`, `get_person_relationships`, `get_person_role_types`, `get_person_subscriptions`, `get_person_renewal_relationships`, `get_person_ypt_training`, `get_parent_guardian_invitation`, `list_membership_registrations`, `get_my_scout`.
-- **Youth advancement (7)** — `get_youth_leadership_history`, `get_youth_ranks`, `get_youth_adventures`, `get_youth_awards`, `get_youth_advancement_requirements`, `get_user_activity_summary`, `get_payment_logs`. `userId` defaults to the authenticated user when omitted.
+- **Youth advancement (9)** — `get_youth_leadership_history`, `get_youth_ranks`, `get_youth_adventures`, `get_youth_awards`, `get_youth_merit_badges`, `get_youth_ss_electives`, `get_youth_advancement_requirements`, `get_user_activity_summary`, `get_payment_logs`. `userId` defaults to the authenticated user when omitted.
 - **Events / activities (3)** — `list_unit_events`, `list_activities`, `list_advancement_comments`. These are POST-as-filter (the body is a search filter, not a creation payload).
-- **Org (1)** — `get_organization_profile`.
+- **Org (15)** — `get_organization_profile`, `list_organization_adults`, `list_organization_youths`, `list_unit_parents`, `list_sub_units`, `get_advancement_dashboard`, `get_advancements_ready_to_award`, `list_unit_leadership_positions`, `list_pending_leadership`, `get_org_merit_badge_progress`, `get_org_rank_progress`, `get_org_adventure_progress`, `get_org_award_progress`, `get_org_payment_logs`, `get_unit_activities_dashboard`.
+- **Merit Badge Counselors (4)** — `search_merit_badge_counselors`, `get_mbc_profile`, `get_mbc_dashboard`, `get_mbc_assigned_youths`.
+- **Search (4)** — `search_units`, `search_camps`, `search_orgs_nearby`, `search_relationships`.
+- **History (1)** — `get_advancement_history`.
 - **Meta (2)** — `whoami` (returns the cached session, no upstream call) and `api_request` (generic passthrough — `{ path, method, query?, body? }` → `{ status, headers, body }`, does not throw on non-2xx).
 
 Run `tools/list` against the server for the full schema of each tool (descriptions, input/output schemas, enums).
@@ -54,7 +57,7 @@ The HTTP server listens on `http://localhost:3032` by default.
 npx @modelcontextprotocol/inspector
 ```
 
-Then point it at `http://localhost:3032/mcp` and you should see all 32 tools.
+Then point it at `http://localhost:3032/mcp` and you should see all 60 tools.
 
 ## Connect from Cursor
 
@@ -91,7 +94,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 }
 ```
 
-Then fully quit and re-open Claude Desktop. The 32 tools should appear in the tools menu.
+Then fully quit and re-open Claude Desktop. The 60 tools should appear in the tools menu.
 
 If you'd rather drive the HTTP server (e.g. you already keep `npm start` running for Cursor / MCP Inspector), you can bridge with [`mcp-remote`](https://www.npmjs.com/package/mcp-remote) instead:
 

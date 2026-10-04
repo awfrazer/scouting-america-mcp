@@ -1,6 +1,63 @@
-import { getCurrentUserId } from "../session.js";
 import { createToolResponse } from "./responses.js";
 import { registerTool } from "./toolRegistry.js";
+import { resolveUserId } from "./userId.js";
+
+registerTool(
+  "search_relationships",
+  {
+    description:
+      "Search for person relationships by various criteria. POST-as-filter.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        personGuid: {
+          type: "string",
+          description: "Person UUID to search relationships for.",
+        },
+      },
+      required: ["personGuid"],
+      additionalProperties: false,
+    },
+    annotations: { readOnlyHint: true },
+  },
+  async (args, client) => {
+    const data = await client.postFilter(
+      "/persons/v2/relationshipSearch",
+      { personGuid: args.personGuid },
+    );
+    return createToolResponse(data);
+  },
+);
+
+registerTool(
+  "get_advancement_history",
+  {
+    description:
+      "Returns advancement history. POST-as-filter; body can include filters like organizationGuid, userId, advancementType.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        organizationGuid: {
+          type: "string",
+          description: "Organization UUID to scope history to.",
+        },
+        userId: {
+          type: ["string", "number"],
+          description: "User ID to get history for. Defaults to authenticated user.",
+        },
+      },
+      additionalProperties: false,
+    },
+    annotations: { readOnlyHint: true },
+  },
+  async (args, client) => {
+    const body: Record<string, unknown> = {};
+    if (args.organizationGuid !== undefined) body.organizationGuid = args.organizationGuid;
+    body.userId = await resolveUserId(args);
+    const data = await client.postFilter("/advancements/advancementHistory", body);
+    return createToolResponse(data);
+  },
+);
 
 
 registerTool(
@@ -227,9 +284,7 @@ registerTool(
     annotations: { readOnlyHint: true },
   },
   async (args, client) => {
-    const userId =
-      (args.userId as string | number | undefined) ??
-      (await getCurrentUserId());
+    const userId = await resolveUserId(args);
     const data = await client.get(`/persons/${userId}/myScout`);
     return createToolResponse(data);
   },
